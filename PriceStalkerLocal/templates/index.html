@@ -1,0 +1,49 @@
+<html>
+  <head>
+    <title>Amazon Price Tracker</title>
+    <!-- <link href='https://fonts.googleapis.com/css?family=Lato:300,400,700' rel='stylesheet' type='text/css'> -->
+    <link rel="stylesheet" href="{{ url_for('static',filename='/styles.css') }}" type="text/css" media="screen" charset="utf-8">
+  </head>
+  <body>
+    <div class="container">
+      <p>
+        <label for="new-task">Add Item</label>
+        <form method="POST" action="/add_item"> <input id="new-task" type="text" name = "task">
+          <button>Add Item</button></form>
+      </p>
+
+      <h3>Tracked Items</h3>
+      <ul id="incomplete-tasks">
+        {% for product in products %}
+          
+        <li>{{ product['name'] }}<br><p class="price">{{ product['current_price'] }}</p><br><br>
+          
+          <form action="/delete" method="post">
+            <button type="submit" value="{{ product['url'] }}" name="delete" class="delete">Delete</button>
+          </form>
+        
+        </li>
+          
+        {% endfor %}
+      </ul>
+
+      <h3>Previously Tracked Items</h3>
+      <ul id="completed-tasks">
+        {% for deleted_product in deleted_products %}
+          
+        <li>{{ deleted_product['name'] }}<br><p class="price">{{ deleted_product['current_price'] }}</p><br><br>
+          
+          <form action="/delete_deleted_products" method="post">
+            <button type="submit" value="{{ deleted_product['url'] }}" name="delete_deleted_products" class="delete_deleted_products">Delete</button>
+          </form>
+        
+        </li>
+          
+        {% endfor %}
+      </ul>
+    </div>
+
+    <script type="text/javascript" src="app.js"></script>
+
+  </body>
+</html>

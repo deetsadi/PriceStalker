@@ -1,0 +1,25 @@
+<html>
+    <title>Amazon Price Tracker</title>
+    <!-- <link href='https://fonts.googleapis.com/css?family=Lato:300,400,700' rel='stylesheet' type='text/css'> -->
+    <link rel="stylesheet" href="{{ url_for('static',filename='/styles.css') }}" type="text/css" media="screen" charset="utf-8">
+    <div class="container">
+        <p>
+          <label for="new-task">Log In</label>
+          <form action="/switch_to_signup" method="POST">
+            <input class="btn btn-default" type="submit" name = "switch" value="Sign Up Instead">
+          </form>
+          <form action="/login_data" method="POST"> 
+               <input type="text" placeholder="Email" name="email" value="{{
+                request.form.email }}">
+                <br>
+               <input type="text" placeholder="Password" name="password" value="{{
+                request.form.password }}">
+               <br>
+               <input class="btn btn-default" type="submit" value="Login">
+              
+          </form>
+          <br>
+          <p>{{ error }}</p>
+        </p>
+  
+</html>
