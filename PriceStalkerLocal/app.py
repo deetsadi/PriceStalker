@@ -40,7 +40,12 @@ def login():
                     if users[key][k]["Password"] == password:
                         session["key"] = key+"/"+k
                         print (session["key"])
-                        return render_template('index.html', products=[], deleted_products=[])
+                        p1 = (ref.child(session["key"]).get())["Products"]
+                        if checkDeletedExists(ref.child(session["key"]).get()):
+                            d1 = (ref.child(session["key"]).get())["Deleted"]
+                        else:
+                            d1 = []
+                        return render_template('index.html', products=p1[1:], deleted_products=d1)
         products = []
         deleted_products = []
         return render_template("login.html", error="Error. Incorrect username or password.")
@@ -63,7 +68,8 @@ def signup():
                 "Name":name, 
                 "Email":email,
                 "Password":password, 
-                "Products": ["test"]
+                "Products": ["test"],
+                "Deleted" : ["test"]
                 }
             }
         )
@@ -75,8 +81,6 @@ def signup():
                 if users[key][k]["Email"] == email:
                     if users[key][k]["Password"] == password:
                         session["key"] = key+"/"+k
-        products = []
-        deleted_products = []
         return render_template("index.html", products=[], deleted_products=[])
 
 @app.route('/switch_to_login', methods=['POST', 'GET'])
@@ -96,39 +100,87 @@ def switch_to_signup():
 @app.route('/add_item', methods=["POST"])
 def got_url():
     url = request.form['task']
-    details = get_product_details(url)
-    print(getUser())
-    if details != None:
-        products.append(get_product_details(url))
-        key = session["key"]
 
-        user = ref.child(key).get()
-        print (user)
-        dict1 = user["Products"]
-        dict1.append(url)
+    key = session["key"]
+    user = ref.child(key).get()
+    p1 = user["Products"]
+
+    if checkDeletedExists(ref.child(session["key"]).get()):
+        d1 = (ref.child(session["key"]).get())["Deleted"]
+    else:
+        d1 = []
+
+    details = get_product_details(url)
+
+    for i in user["Products"][1:]:
+        if i["url"] == details["url"]:
+            return render_template('index.html', products=p1[1:], deleted_products=d1)
+
+    details = get_product_details(url)
+
+    if details != None:
+        p1.append(get_product_details(url))
 
         ref.child(key).update({
-            "Products":dict1
+            "Products":p1
         })
-    return render_template('index.html', products=products, deleted_products=deleted_products)
+
+    return render_template('index.html', products=p1[1:], deleted_products=d1)
 
 
 @app.route('/delete', methods=['GET', 'POST'])
 def delete():
+
+    p1 = (ref.child(session["key"]).get())["Products"]
+
+    if checkDeletedExists(ref.child(session["key"]).get()):
+        d1 = (ref.child(session["key"]).get())["Deleted"]
+    else:
+        d1 = []
+
     index = 0
-    for i in range(len(products)):
-        if products[i]["url"] == request.form['delete']:
+    for i in range(len(p1)):
+        if i == 0:
+            continue
+        if p1[i]["url"] == request.form['delete']:
             index = i
-    deleted_products.append(products[index])
-    del products[index]
-    print (deleted_products)
-    return render_template('index.html', products=products, deleted_products=deleted_products)
+
+    d1.append(p1[index])
+    p1.remove(p1[index])
+
+    key = session["key"]
+
+    ref.child(key).update({
+        "Products":p1,
+        "Deleted":d1
+    })
+
+    return render_template('index.html', products=p1[1:], deleted_products=d1)
 
 @app.route('/delete_deleted_products', methods=['GET', 'POST'])
 def delete_deleted_products():
     index = 0
-    for i in range(len(deleted_products)):
-        if deleted_products[i]["url"] == request.form['delete_deleted_products']:
+    p1 = (ref.child(session["key"]).get())["Products"]
+    
+    if checkDeletedExists(ref.child(session["key"]).get()):
+        d1 = (ref.child(session["key"]).get())["Deleted"]
+    else:
+        d1 = []
+
+    for i in range(len(d1)):
+        if d1[i]["url"] == request.form['delete_deleted_products']:
             index = i
-    del deleted_products[index]
-    return render_template('index.html', products=products, deleted_products=deleted_products)
+    del (d1[index])
+
+    key = session["key"]
+    ref.child(key).update({
+        "Deleted":d1
+    })
+
+    return render_template('index.html', products=p1[1:], deleted_products=d1)
+
+
+def checkDeletedExists(user):
+    if "Deleted" in user.keys():
+        return True
+    return False

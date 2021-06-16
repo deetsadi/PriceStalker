@@ -16,11 +16,11 @@
       <ul id="incomplete-tasks">
         {% for product in products %}
           
-        <li>{{ product['name'] }}<br><p class="price">{{ product['current_price'] }}</p><br><br>
+        <li>{{ product['name'] }}<br><p class="price">Price: ${{ product['current_price'] }}</p><br>
           
-          <form action="/delete" method="post">
-            <button type="submit" value="{{ product['url'] }}" name="delete" class="delete">Delete</button>
-          </form>
+        <form action="/delete" method="post">
+          <button type="submit" value="{{ product['url'] }}" name="delete" class="delete">Delete</button>
+        </form>
         
         </li>
           
@@ -31,7 +31,7 @@
       <ul id="completed-tasks">
         {% for deleted_product in deleted_products %}
           
-        <li>{{ deleted_product['name'] }}<br><p class="price">{{ deleted_product['current_price'] }}</p><br><br>
+        <li>{{ deleted_product['name'] }}<br><p class="price">Price: ${{ deleted_product['current_price'] }}</p><br><br>
           
           <form action="/delete_deleted_products" method="post">
             <button type="submit" value="{{ deleted_product['url'] }}" name="delete_deleted_products" class="delete_deleted_products">Delete</button>
