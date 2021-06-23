@@ -5,6 +5,7 @@ import random
 from firebase_admin import credentials, auth, db
 from flask import Flask, render_template, request, redirect, url_for, session
 from scraper import get_product_details, extract_url
+from emailtest import email_handling
 
 
 app = Flask(__name__)
@@ -19,6 +20,8 @@ firebase = firebase_admin.initialize_app(cred, {"databaseURL":"https://dealgette
 ref = db.reference("/Users")
 current_user = ""
 current_user_uid = ""
+
+e=email_handling()
 
 @app.route('/')
 def main():
@@ -41,6 +44,19 @@ def login():
                         session["key"] = key+"/"+k
                         print (session["key"])
                         p1 = (ref.child(session["key"]).get())["Products"]
+
+                        for i in p1[1:]:
+                            if get_product_details(i["url"])["current_price"] != i["current_price"]:
+                                i = get_product_details(i["url"])
+                                if (users[key][k]["Email_Notif"]):
+                                    msg = "An item on your watch list has gone on sale! \n",i["name"], " is now $", i["current_price"]
+                                    e.send_email(email, msg)
+
+                            
+                        ref.child(session["key"]).update({
+                            "Products":p1
+                        })
+
                         if checkDeletedExists(ref.child(session["key"]).get()):
                             d1 = (ref.child(session["key"]).get())["Deleted"]
                         else:
@@ -60,6 +76,7 @@ def signup():
         name = (unicodedata.normalize('NFKD', request.form.get('name')).encode('ascii', 'ignore')).decode('UTF-8')
         email = (unicodedata.normalize('NFKD', request.form.get('email')).encode('ascii', 'ignore')).decode('UTF-8')
         password = (unicodedata.normalize('NFKD', request.form.get('password')).encode('ascii', 'ignore')).decode('UTF-8')
+        email_notif = request.form.get('email_notif') != None
         if email is None or password is None:
             return {'message': 'Error missing email or password'},400
         ref.push().set(
@@ -69,7 +86,8 @@ def signup():
                 "Email":email,
                 "Password":password, 
                 "Products": ["test"],
-                "Deleted" : ["test"]
+                "Deleted" : [],
+                "Email_Notif": email_notif
                 }
             }
         )
@@ -96,6 +114,37 @@ def switch_to_signup():
         if request.form['switch'] == 'Sign Up Instead':
             return render_template('signup.html')
 
+@app.route('/log_out', methods=['POST', 'GET'])
+def log_out():
+    if request.method == 'POST':
+        return render_template("login.html")
+    
+    key = session["key"]
+    user = ref.child(key).get()
+    p1 = user["Products"]
+
+    if checkDeletedExists(ref.child(session["key"]).get()):
+        d1 = (ref.child(session["key"]).get())["Deleted"]
+    else:
+        d1 = []
+
+    for i in p1[1:]:
+        if get_product_details(i["url"])["current_price"] != i["current_price"]:
+            i = get_product_details(i["url"])
+            if (user["Email_Notif"]):
+                msg = "An item on your watch list has gone on sale! \n",i["name"], " is now $", i["current_price"]
+                e.send_email(user["Email"], msg)
+                            
+
+    ref.child(session["key"]).update({
+        "Products":p1
+    })
+
+    for i in p1[1:]:
+        if get_product_details(i["url"])["current_price"] != i["current_price"]:
+            i = get_product_details(i["url"])
+    return render_template('index.html', products = p1[1:], deleted_products = d1)
+
 
 @app.route('/add_item', methods=["POST"])
 def got_url():
@@ -116,6 +165,18 @@ def got_url():
         if i["url"] == details["url"]:
             return render_template('index.html', products=p1[1:], deleted_products=d1)
 
+    for i in p1[1:]:
+        if get_product_details(i["url"])["current_price"] != i["current_price"]:
+            i = get_product_details(i["url"])
+            if (user["Email_Notif"]):
+                msg = "An item on your watch list has gone on sale! \n",i["name"], " is now $", i["current_price"]
+                e.send_email(user["Email"], msg)
+                            
+
+    ref.child(session["key"]).update({
+        "Products":p1
+    })
+
     details = get_product_details(url)
 
     if details != None:
@@ -124,6 +185,11 @@ def got_url():
         ref.child(key).update({
             "Products":p1
         })
+    
+    for i in p1[1:]:
+        if get_product_details(i["url"])["current_price"] != i["current_price"]:
+            i = get_product_details(i["url"])
+
 
     return render_template('index.html', products=p1[1:], deleted_products=d1)
 
@@ -150,10 +216,20 @@ def delete():
 
     key = session["key"]
 
+    for i in p1[1:]:
+        if get_product_details(i["url"])["current_price"] != i["current_price"]:
+            i = get_product_details(i["url"])
+            if ((ref.child(session["key"]).get())["Email_Notif"]):
+                msg = "An item on your watch list has gone on sale! \n",i["name"], " is now $", i["current_price"]
+                e.send_email((ref.child(session["key"]).get())["Email"], msg)
+                            
+
     ref.child(key).update({
         "Products":p1,
         "Deleted":d1
     })
+
+
 
     return render_template('index.html', products=p1[1:], deleted_products=d1)
 

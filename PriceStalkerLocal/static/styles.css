@@ -19,6 +19,12 @@ overflow: hidden;
 max-width: 10ch;
 color: #E5AB62;
 }
+a {
+float: left;
+overflow: hidden;
+max-width: 10ch;
+color: #E5AB62; 
+}
 li, h3 {
 clear:both;
 list-style:none;
@@ -124,3 +130,13 @@ display:block;
 ul li.editMode label {
 display:none;
 }
+
+.topnav {
+    background-color: #333;
+    overflow: hidden;
+  }
+  
+.topnavButton {
+    color: #333;
+}
+  
