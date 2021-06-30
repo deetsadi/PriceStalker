@@ -1,0 +1,18 @@
+* {
+    font-family: 'Arial';
+}
+
+.topOfSite {
+    display: flex;
+    justify-content: center;
+    text-align: center;
+}
+.title {
+    margin: 0px;
+    font-size: 5vw;
+}
+.logoutButton {
+    position: fixed;
+    right: 10px;
+    top: 10px;
+}
