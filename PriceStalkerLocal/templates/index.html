@@ -1,54 +1,80 @@
-<html>
-  <head>
-    <title>Amazon Price Tracker</title>
-    <!-- <link href='https://fonts.googleapis.com/css?family=Lato:300,400,700' rel='stylesheet' type='text/css'> -->
-    <link rel="stylesheet" href="{{ url_for('static',filename='/styles.css') }}" type="text/css" media="screen" charset="utf-8">
-  </head>
-  <body>
-    <div class="topnav">
-      <form method = "POST" action="log_out" >
-        <button type="submit" value = "log_out" name = "Log Out" class="topnavButton">Log Out</button>
+<!DOCTYPE html>
+<html lang="en">
+
+<!--TITLE AND CSS AND JS LINKS-->
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PriceStalker</title>
+
+  <link rel="stylesheet" href="../static/main.css">
+  <script type="text/javascript" src="app.js"></script>
+</head>
+
+<!--HTML-->
+<body>
+  <div class="topOfSite">
+    <div>
+      <p class="title">PriceStalker</p>
+    </div>
+
+    <div class="logoutButton">
+      <form method="POST" action="log_out">
+        <input type="submit" value="Log Out">
       </form>
     </div>
-    <div class="container">
-      <p>
-        <label for="new-task">Add Item</label>
-        <form method="POST" action="/add_item"> <input id="new-task" type="text" name = "task">
-          <button>Add Item</button></form>
-      </p>
+  </div>
 
-      <h3>Tracked Items</h3>
-      <ul id="incomplete-tasks">
-        {% for product in products %}
-          
-        <li>{{ product['name'] }}<br><p class="price">Price: ${{ product['current_price'] }}</p><br>
-          
-        <form action="/delete" method="post">
-          <button type="submit" value="{{ product['url'] }}" name="delete" class="delete">Delete</button>
+  <div class="container">
+    <h3>Add Item</h3>
+    <form method="POST" action="/add_item">
+      <input id="new-task" type="text" name="task">
+      <input type="submit" value="Add Item">
+    </form>
+
+    <h3>Tracked Items</h3>
+    <ul id="incomplete-tasks">
+      pythonInsert
+        
+      <li>
+        pythonInsert
+        <br>
+          <p class="price">
+            pythonInsert
+          </p>
+        <br>
+        
+      <form action="/delete" method="post">
+        <button type="submit" value="{{ product['url'] }}" name="delete" class="delete">Delete</button>
+      </form>
+      
+      </li>
+        
+      pythonInsert
+    </ul>
+
+    <h3>Previously Tracked Items</h3>
+    <ul id="completed-tasks">
+      pythonInsert
+        
+      <li>
+        pythonInsert
+        <br>
+          <p class="price">
+            pythonInsert
+          </p>
+          <br>
+        <br>
+        
+        <form action="/delete_deleted_products" method="post">
+          <button type="submit" value="{{ deleted_product['url'] }}" name="delete_deleted_products" class="delete_deleted_products">Delete</button>
         </form>
-        
-        </li>
-          
-        {% endfor %}
-      </ul>
+      
+      </li>
 
-      <h3>Previously Tracked Items</h3>
-      <ul id="completed-tasks">
-        {% for deleted_product in deleted_products %}
-          
-        <li>{{ deleted_product['name'] }}<br><p class="price">Price: ${{ deleted_product['current_price'] }}</p><br><br>
-          
-          <form action="/delete_deleted_products" method="post">
-            <button type="submit" value="{{ deleted_product['url'] }}" name="delete_deleted_products" class="delete_deleted_products">Delete</button>
-          </form>
-        
-        </li>
-          
-        {% endfor %}
-      </ul>
-    </div>
-
-    <script type="text/javascript" src="app.js"></script>
-
-  </body>
+      pythonInsert
+    </ul>
+  </div>
+</body>
 </html>
