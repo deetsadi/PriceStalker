@@ -18,25 +18,21 @@
     <div>
       <p class="title">PriceStalker</p>
     </div>
-
     <div class="logoutButton">
       <form method="POST" action="log_out">
         <input type="submit" value="Log Out">
       </form>
     </div>
   </div>
-
   <div class="container">
     <h3>Add Item</h3>
     <form method="POST" action="/add_item">
       <input id="new-task" type="text" name="task">
       <input type="submit" value="Add Item">
     </form>
-
     <h3>Tracked Items</h3>
     <ul id="incomplete-tasks">
       pythonInsert
-        
       <li>
         pythonInsert
         <br>
@@ -44,20 +40,15 @@
             pythonInsert
           </p>
         <br>
-        
       <form action="/delete" method="post">
         <button type="submit" value="{{ product['url'] }}" name="delete" class="delete">Delete</button>
       </form>
-      
       </li>
-        
       pythonInsert
     </ul>
-
     <h3>Previously Tracked Items</h3>
     <ul id="completed-tasks">
       pythonInsert
-        
       <li>
         pythonInsert
         <br>
@@ -66,13 +57,10 @@
           </p>
           <br>
         <br>
-        
         <form action="/delete_deleted_products" method="post">
           <button type="submit" value="{{ deleted_product['url'] }}" name="delete_deleted_products" class="delete_deleted_products">Delete</button>
         </form>
-      
       </li>
-
       pythonInsert
     </ul>
   </div>
