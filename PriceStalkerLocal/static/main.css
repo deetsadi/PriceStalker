@@ -1,0 +1,29 @@
+* {
+    font-family: 'Arial';
+}
+
+.topOfSite {
+    display: flex;
+    justify-content: center;
+    text-align: center;
+}
+.title {
+    margin: 0px;
+    font-size: 5vw;
+}
+.logoutButton {
+    position: fixed;
+    right: 10px;
+    top: 10px;
+}
+
+.container {
+    display: flex;
+    justify-content: space-between;
+    padding-top: 5vh;
+}
+.container div {
+    width: 100%;
+    padding: 5px;
+    border: 1px solid black;
+}
