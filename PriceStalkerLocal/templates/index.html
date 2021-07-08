@@ -27,58 +27,54 @@
   </div>
 
   <div class="container">
-    <div>
-      <h3>Add Item</h3>
-      <form method="POST" action="/add_item">
-        <input id="new-task" type="text" name="task">
-        <input type="submit" value="Add Item">
+    <h3>Add Item</h3>
+    <form method="POST" action="/add_item">
+      <input id="new-task" type="text" name="task">
+      <input type="submit" value="Add Item">
+    </form>
+
+    <h3>Tracked Items</h3>
+    <ul id="incomplete-tasks">
+      pythonInsert
+        
+      <li>
+        pythonInsert
+        <br>
+          <p class="price">
+            pythonInsert
+          </p>
+        <br>
+        
+      <form action="/delete" method="post">
+        <button type="submit" value="{{ product['url'] }}" name="delete" class="delete">Delete</button>
       </form>
-    </div>
+      
+      </li>
+        
+      pythonInsert
+    </ul>
 
-    <div>
-      <h3>Tracked Items</h3>
-      <ul id="incomplete-tasks">
+    <h3>Previously Tracked Items</h3>
+    <ul id="completed-tasks">
+      pythonInsert
+        
+      <li>
         pythonInsert
-        
-        <li>
-          pythonInsert
+        <br>
+          <p class="price">
+            pythonInsert
+          </p>
           <br>
-            <p class="price">
-              pythonInsert
-            </p>
-          <br>
+        <br>
         
-        <form action="/delete" method="post">
-          <button type="submit" value="{{ product['url'] }}" name="delete" class="delete">Delete</button>
+        <form action="/delete_deleted_products" method="post">
+          <button type="submit" value="{{ deleted_product['url'] }}" name="delete_deleted_products" class="delete_deleted_products">Delete</button>
         </form>
-        </li>
-        
-        pythonInsert
-      </ul>
-    </div>
+      
+      </li>
 
-    <div>
-      <h3>Previously Tracked Items</h3>
-      <ul id="completed-tasks">
-        pythonInsert
-        
-        <li>
-          pythonInsert
-          <br>
-            <p class="price">
-              pythonInsert
-            </p>
-            <br>
-          <br>
-        
-          <form action="/delete_deleted_products" method="post">
-            <button type="submit" value="{{ deleted_product['url'] }}" name="delete_deleted_products" class="delete_deleted_products">Delete</button>
-          </form>
-        </li>
-
-        pythonInsert
-      </ul>
-    </div>
+      pythonInsert
+    </ul>
   </div>
 </body>
 </html>
